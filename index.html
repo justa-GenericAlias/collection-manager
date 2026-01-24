@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Movie Collection Manager</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <header>
+    <h1>🎬 Movie Collection Manager</h1>
+  </header>
+
+  <main>
+    <!-- ===== Stats View ===== -->
+    <section id="stats">
+      <h2>Stats</h2>
+      <p>Total Movies: <span id="total-count">0</span></p>
+      <p>Average Rating: <span id="average-rating">0</span></p>
+    </section>
+
+    <!-- ===== Form View ===== -->
+    <section id="form-section">
+      <h2 id="form-title">Add Movie</h2>
+
+      <form id="movie-form">
+        <input type="hidden" id="movie-id" />
+
+        <label>
+          Title:
+          <input type="text" id="title" required />
+        </label>
+
+        <label>
+          Genre:
+          <input type="text" id="genre" required />
+        </label>
+
+        <label>
+          Year:
+          <input type="number" id="year" min="1900" max="2100" required />
+        </label>
+
+        <label>
+          Rating (1–10):
+          <input type="number" id="rating" min="1" max="10" required />
+        </label>
+
+        <button type="submit">Save Movie</button>
+        <button type="button" id="cancel-edit" hidden>Cancel</button>
+      </form>
+    </section>
+
+    <!-- ===== List View ===== -->
+    <section id="list-section">
+      <h2>Movie List</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Year</th>
+            <th>Rating</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="movie-list">
+          <!-- JS renders rows here -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="js/collection_app.js"></script>
+</body>
+</html>
