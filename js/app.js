@@ -1,7 +1,7 @@
 const defaultMovies = Array.from({ length: 30 }, (_, i) => ({
   id: i + 1,
   title: `Movie ${i + 1}`,
-  genre: "Drama",
+  genre: "N/A",
   year: 2000 + i,
   rating: (i % 10) + 1
 }));
@@ -87,10 +87,9 @@ form.addEventListener("submit", e => {
       year,
       rating
     };
-
     movies.push(newMovie);
-  } 
-  else {
+
+  } else {
     const movie = movies.find(m => m.id === editingId);
     movie.title = title;
     movie.genre = genre;
