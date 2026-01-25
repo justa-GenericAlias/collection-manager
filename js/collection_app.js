@@ -1,13 +1,11 @@
-// ===== Seed Data (minimum 30 records) =====
 const defaultMovies = Array.from({ length: 30 }, (_, i) => ({
   id: i + 1,
   title: `Movie ${i + 1}`,
-  genre: "Drama",
-  year: 2000 + (i % 20),
+  genre: "N/A",
+  year: 2000 + i,
   rating: (i % 10) + 1
 }));
 
-// ===== Local Storage Helpers =====
 function loadMovies() {
   const saved = localStorage.getItem("movies");
   if (saved) {
@@ -22,11 +20,9 @@ function saveMovies() {
   localStorage.setItem("movies", JSON.stringify(movies));
 }
 
-// ===== App State =====
 let movies = loadMovies();
 let editingId = null;
 
-// ===== DOM Elements =====
 const listEl = document.getElementById("movie-list");
 const form = document.getElementById("movie-form");
 const formTitle = document.getElementById("form-title");
@@ -35,7 +31,6 @@ const cancelEditBtn = document.getElementById("cancel-edit");
 const totalCountEl = document.getElementById("total-count");
 const avgRatingEl = document.getElementById("average-rating");
 
-// ===== Render Functions =====
 function renderList() {
   listEl.innerHTML = "";
 
@@ -71,7 +66,6 @@ function render() {
   renderStats();
 }
 
-// ===== CRUD Logic =====
 form.addEventListener("submit", e => {
   e.preventDefault();
 
@@ -86,7 +80,6 @@ form.addEventListener("submit", e => {
   }
 
   if (editingId === null) {
-    // CREATE
     const newMovie = {
       id: Date.now(),
       title,
@@ -94,9 +87,10 @@ form.addEventListener("submit", e => {
       year,
       rating
     };
+
     movies.push(newMovie);
-  } else {
-    // UPDATE
+  } 
+  else {
     const movie = movies.find(m => m.id === editingId);
     movie.title = title;
     movie.genre = genre;
@@ -140,5 +134,4 @@ cancelEditBtn.addEventListener("click", () => {
   cancelEditBtn.hidden = true;
 });
 
-// ===== Initial Load =====
 render();
