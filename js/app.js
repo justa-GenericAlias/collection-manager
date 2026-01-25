@@ -1,3 +1,4 @@
+//Starting default data
 const defaultMovies = Array.from({ length: 30 }, (_, i) => ({
   id: i + 1,
   title: `Movie ${i + 1}`,
@@ -6,6 +7,7 @@ const defaultMovies = Array.from({ length: 30 }, (_, i) => ({
   rating: (i % 10) + 1
 }));
 
+//Data loaded from localStorage
 function loadMovies() {
   const saved = localStorage.getItem("movies");
   if (saved) {
@@ -16,6 +18,7 @@ function loadMovies() {
   }
 }
 
+//Data saved to localStorage
 function saveMovies() {
   localStorage.setItem("movies", JSON.stringify(movies));
 }
@@ -31,6 +34,7 @@ const cancelEditBtn = document.getElementById("cancel-edit");
 const totalCountEl = document.getElementById("total-count");
 const avgRatingEl = document.getElementById("average-rating");
 
+//Rendering function
 function renderList() {
   listEl.innerHTML = "";
 
@@ -66,6 +70,7 @@ function render() {
   renderStats();
 }
 
+//Logic for CRUD
 form.addEventListener("submit", e => {
   e.preventDefault();
 
