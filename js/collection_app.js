@@ -1,7 +1,7 @@
 const defaultMovies = Array.from({ length: 30 }, (_, i) => ({
   id: i + 1,
   title: `Movie ${i + 1}`,
-  genre: "N/A",
+  genre: "Drama",
   year: 2000 + i,
   rating: (i % 10) + 1
 }));
