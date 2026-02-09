@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-
+  <div class="wrap">
   <header>
     <h1>Movie Collection Manager</h1>
   </header>
@@ -23,7 +23,6 @@
 
       <form id="movie-form">
         <input type="hidden" id="movie-id" />
-
         <label>
           Title:
           <input type="text" id="title" required />
@@ -34,18 +33,22 @@
           <input type="text" id="genre" required />
         </label>
 
-        <label>
-          Year:
-          <input type="number" id="year" min="1900" max="2100" required />
-        </label>
+        <div class="row">
+          <label>
+            Year:
+            <input type="number" id="year" min="1900" max="2100" required />
+          </label>
 
-        <label>
-          Rating (1–10):
-          <input type="number" id="rating" min="1" max="10" required />
-        </label>
+          <label>
+            Rating:
+            <input type="number" id="rating" min="1" max="10" required />
+          </label>
+        </div>
 
-        <button type="submit">Save Movie</button>
-        <button type="button" id="cancel-edit" hidden>Cancel</button>
+        <div class="row form-actions" style="margin-top:10px;">
+          <button type="submit" class="btn primary" id="save-btn">Save Movie</button>
+          <button type="button" id="cancel-edit" class="btn ghost" hidden>Cancel</button>
+        </div>
       </form>
     </section>
 
@@ -73,6 +76,7 @@
       </div>
     </section>
   </main>
+  </div>
 
   <script src="js/app.js"></script>
 </body>
