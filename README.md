@@ -11,7 +11,7 @@ What I added:
 Local run (development):
 
 1. Ensure Python 3.8+ is installed.
-2. Create a virtualenv and install deps:
+2. Create a virtual environment and install deps:
 
 ```bash
 python -m venv .venv
@@ -25,12 +25,8 @@ pip install -r server/requirements.txt
 python server/app.py
 ```
 
-4. Serve the frontend by opening `index.html` in a browser, or run a local static server. The frontend expects the API at `http://localhost:5000` by default.
-
-Notes about deployment and the submission checklist:
-- The frontend can be deployed to Netlify (static site). Use the Netlify URL for the frontend.
-- The Flask backend must be deployed to a separate host that allows file persistence (for example Render, Railway, or a small VPS). Netlify Functions are serverless and do not provide durable file storage, so the backend should not be deployed to Netlify functions if JSON persistence is required.
-- When deployed, update `API_BASE` in `js/app.js` (or set `window.API_BASE`) to point to the deployed API URL.
+4. Open the applications with the link:
+`https://jaga-collection-manager.netlify.app/`
 
 Checklist for submission (what you still need to do to finalize deployment):
 - Deploy frontend to Netlify (Netlify URL must be public and work in incognito)
