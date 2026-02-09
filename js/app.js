@@ -1,79 +1,73 @@
-//Starting default data
-const defaultMovies = Array.from({ length: 30 }, (_, i) => ({
-  id: i + 1,
-  title: `Movie ${i + 1}`,
-  genre: "N/A",
-  year: 2000 + i,
-  rating: (i % 10) + 1
-}));
+// Frontend now talks to a backend API (Flask) which persists JSON on the server.
+const API_BASE = window.API_BASE || "http://localhost:5000";
+const PER_PAGE = 10;
 
-//Data loaded from localStorage
-function loadMovies() {
-  const saved = localStorage.getItem("movies");
-  if (saved) {
-    return JSON.parse(saved);
-  } else {
-    localStorage.setItem("movies", JSON.stringify(defaultMovies));
-    return defaultMovies;
-  }
-}
-
-//Data saved to localStorage
-function saveMovies() {
-  localStorage.setItem("movies", JSON.stringify(movies));
-}
-
-let movies = loadMovies();
+let currentPage = 1;
+let totalPages = 1;
 let editingId = null;
 
 const listEl = document.getElementById("movie-list");
 const form = document.getElementById("movie-form");
 const formTitle = document.getElementById("form-title");
 const cancelEditBtn = document.getElementById("cancel-edit");
-
 const totalCountEl = document.getElementById("total-count");
 const avgRatingEl = document.getElementById("average-rating");
+const currentPageEl = document.getElementById("current-page");
+const totalPagesEl = document.getElementById("total-pages");
+const prevBtn = document.getElementById("prev-page");
+const nextBtn = document.getElementById("next-page");
 
-//Rendering function
-function renderList() {
+async function fetchMovies(page = 1) {
+  const res = await fetch(`${API_BASE}/movies?page=${page}`);
+  if (!res.ok) throw new Error("Failed to load movies");
+  return res.json();
+}
+
+async function fetchStats() {
+  const res = await fetch(`${API_BASE}/stats`);
+  if (!res.ok) throw new Error("Failed to load stats");
+  return res.json();
+}
+
+function renderRows(movies) {
   listEl.innerHTML = "";
-
   movies.forEach(movie => {
     const row = document.createElement("tr");
-
     row.innerHTML = `
       <td>${movie.title}</td>
       <td>${movie.genre}</td>
       <td>${movie.year}</td>
       <td>${movie.rating}</td>
       <td>
-        <button onclick="editMovie(${movie.id})">Edit</button>
-        <button onclick="deleteMovie(${movie.id})">Delete</button>
+        <button class="btn" data-edit="${movie.id}">Edit</button>
+        <button class="btn" data-delete="${movie.id}">Delete</button>
       </td>
     `;
-
     listEl.appendChild(row);
   });
 }
 
-function renderStats() {
-  totalCountEl.textContent = movies.length;
-
-  const avg =
-    movies.reduce((sum, m) => sum + m.rating, 0) / movies.length || 0;
-
-  avgRatingEl.textContent = avg.toFixed(1);
+async function loadPage(page) {
+  try {
+    const payload = await fetchMovies(page);
+    currentPage = payload.page;
+    totalPages = payload.total_pages || 1;
+    currentPageEl.textContent = currentPage;
+    totalPagesEl.textContent = totalPages;
+    renderRows(payload.data);
+    const s = await fetchStats();
+    totalCountEl.textContent = s.total;
+    avgRatingEl.textContent = (s.average_rating || 0).toFixed(1);
+    prevBtn.disabled = currentPage <= 1;
+    nextBtn.disabled = currentPage >= totalPages;
+  } catch (err) {
+    console.error(err);
+    alert('Error loading data from server');
+  }
 }
 
-function render() {
-  renderList();
-  renderStats();
-}
-
-//Logic for CRUD
-form.addEventListener("submit", e => {
+form.addEventListener("submit", async e => {
   e.preventDefault();
-
   const title = document.getElementById("title").value.trim();
   const genre = document.getElementById("genre").value.trim();
   const year = Number(document.getElementById("year").value);
@@ -84,52 +78,31 @@ form.addEventListener("submit", e => {
     return;
   }
 
-  if (editingId === null) {
-    const newMovie = {
-      id: Date.now(),
-      title,
-      genre,
-      year,
-      rating
-    };
-    movies.push(newMovie);
-
-  } else {
-    const movie = movies.find(m => m.id === editingId);
-    movie.title = title;
-    movie.genre = genre;
-    movie.year = year;
-    movie.rating = rating;
-    editingId = null;
-    cancelEditBtn.hidden = true;
-    formTitle.textContent = "Add Movie";
+  const body = { title, genre, year, rating };
+  try {
+    if (editingId === null) {
+      await fetch(`${API_BASE}/movies`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+    } else {
+      await fetch(`${API_BASE}/movies/${editingId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      editingId = null;
+      cancelEditBtn.hidden = true;
+      formTitle.textContent = "Add Movie";
+    }
+    form.reset();
+    await loadPage(currentPage);
+  } catch (err) {
+    console.error(err);
+    alert('Server error saving movie');
   }
-
-  form.reset();
-  saveMovies();
-  render();
 });
-
-function editMovie(id) {
-  const movie = movies.find(m => m.id === id);
-
-  document.getElementById("title").value = movie.title;
-  document.getElementById("genre").value = movie.genre;
-  document.getElementById("year").value = movie.year;
-  document.getElementById("rating").value = movie.rating;
-
-  editingId = id;
-  formTitle.textContent = "Edit Movie";
-  cancelEditBtn.hidden = false;
-}
-
-function deleteMovie(id) {
-  if (!confirm("Are you sure you want to delete this movie?")) return;
-
-  movies = movies.filter(m => m.id !== id);
-  saveMovies();
-  render();
-}
 
 cancelEditBtn.addEventListener("click", () => {
   editingId = null;
@@ -138,4 +111,44 @@ cancelEditBtn.addEventListener("click", () => {
   cancelEditBtn.hidden = true;
 });
 
-render();
+listEl.addEventListener("click", async (e) => {
+  const editId = e.target.getAttribute('data-edit');
+  const delId = e.target.getAttribute('data-delete');
+  if (editId) {
+    try {
+      const res = await fetch(`${API_BASE}/movies/${editId}`);
+      if (!res.ok) throw new Error('Not found');
+      const movie = await res.json();
+      document.getElementById("title").value = movie.title;
+      document.getElementById("genre").value = movie.genre;
+      document.getElementById("year").value = movie.year;
+      document.getElementById("rating").value = movie.rating;
+      editingId = movie.id;
+      formTitle.textContent = "Edit Movie";
+      cancelEditBtn.hidden = false;
+    } catch (err) {
+      alert('Failed to load movie');
+    }
+  }
+  if (delId) {
+    if (!confirm('Are you sure you want to delete this movie?')) return;
+    try {
+      const res = await fetch(`${API_BASE}/movies/${delId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Delete failed');
+      // If deleting the last item on the page, ensure page remains valid
+      await loadPage(currentPage);
+    } catch (err) {
+      alert('Failed to delete movie');
+    }
+  }
+});
+
+prevBtn.addEventListener('click', () => {
+  if (currentPage > 1) loadPage(currentPage - 1);
+});
+nextBtn.addEventListener('click', () => {
+  if (currentPage < totalPages) loadPage(currentPage + 1);
+});
+
+// initial load
+loadPage(1);

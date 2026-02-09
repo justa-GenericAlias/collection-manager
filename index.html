@@ -51,6 +51,11 @@
 
     <section id="list-section">
       <h2>Movie List</h2>
+      <div id="paging" class="card" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <button id="prev-page" class="btn">Previous</button>
+        <div style="flex:1;text-align:center">Page <span id="current-page">1</span> of <span id="total-pages">1</span></div>
+        <button id="next-page" class="btn">Next</button>
+      </div>
       <table>
         <thead>
           <tr>
