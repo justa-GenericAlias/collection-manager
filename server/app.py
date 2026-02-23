@@ -10,7 +10,7 @@ load_dotenv()
 Base = declarative_base()
 
 class Movie(Base):
-    __tablename__ = 'movies'
+    __tablename__ = 'movie_collection'
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
     genre = Column(String, nullable=False)
