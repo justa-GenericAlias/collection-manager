@@ -33,9 +33,11 @@ function renderRows(movies) {
   listEl.innerHTML = "";
   movies.forEach(movie => {
     const row = document.createElement("tr");
-    const imgSrc = movie.image_url || "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNzUiIHZpZXdCb3g9IjAgMCA1MCA3NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9Ijc1IiBmaWxsPSIjY2NjIi8+Cjx0ZXh0IHg9IjI1IiB5PSIzNy41IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiMwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4=";
+    const imgSrc = movie.image_url || "data:image/svg+xml,<svg width='50' height='75' xmlns='http://www.w3.org/2000/svg'><rect width='50' height='75' fill='%23ccc'/><text x='25' y='40' font-family='Arial' font-size='12' fill='%23000' text-anchor='middle'>No Image</text></svg>";
+    const isPlaceholder = !movie.image_url;
+    const altText = isPlaceholder ? "" : movie.title;
     row.innerHTML = `
-      <td><img src="${imgSrc}" alt="${movie.title}" style="width:50px;height:75px;object-fit:cover;" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNzUiIHZpZXdCb3g9IjAgMCA1MCA3NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9Ijc1IiBmaWxsPSIjY2NjIi8+Cjx0ZXh0IHg9IjI1IiB5PSIzNy41IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiMwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkJyb2tlbjwvdGV4dD4KPHN2Zz4='"></td>
+      <td><img src="${imgSrc}" alt="${altText}" style="width:50px;height:75px;object-fit:cover;" onerror="this.src='data:image/svg+xml,<svg width='50' height='75' xmlns='http://www.w3.org/2000/svg'><rect width='50' height='75' fill='%23ccc'/><text x='25' y='40' font-family='Arial' font-size='12' fill='%23000' text-anchor='middle'>Broken</text></svg>'"></td>
       <td>${movie.title}</td>
       <td>${movie.genre}</td>
       <td>${movie.year}</td>
