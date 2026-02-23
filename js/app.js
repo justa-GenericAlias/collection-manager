@@ -1,5 +1,5 @@
 // Frontend now talks to a backend API (Flask) which persists JSON on the server.
-const API_BASE = window.API_BASE || "http://localhost:5000";
+const API_BASE = window.API_BASE || "https://movie-collection-manager.herokuapp.com";
 const PER_PAGE = 10;
 
 let currentPage = 1;
