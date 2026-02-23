@@ -199,7 +199,7 @@ def test():
     session = Session()
     count = session.query(Movie).count()
     session.close()
-    return {'message': 'API is working', 'movie_count': count}
+    return {'message': 'API is working v2', 'movie_count': count}
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
