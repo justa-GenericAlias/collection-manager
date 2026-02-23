@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
-from sqlalchemy import create_engine, Column, Integer, String, Float
+from sqlalchemy import create_engine, Column, Integer, String, Float, inspect
 from sqlalchemy.orm import sessionmaker, declarative_base
 import os
 from dotenv import load_dotenv
@@ -30,7 +30,9 @@ CORS(app)
 PER_PAGE = 10
 
 # Create tables
-Base.metadata.create_all(engine)
+inspector = inspect(engine)
+if not inspector.has_table('movies'):
+    Base.metadata.create_all(engine)
 
 def seed_data():
     session = Session()
