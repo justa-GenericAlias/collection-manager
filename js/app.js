@@ -33,9 +33,9 @@ function renderRows(movies) {
   listEl.innerHTML = "";
   movies.forEach(movie => {
     const row = document.createElement("tr");
-    const imgSrc = movie.image_url || "https://via.placeholder.com/50x75?text=No+Image";
+    const imgSrc = movie.image_url || "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNzUiIHZpZXdCb3g9IjAgMCA1MCA3NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9Ijc1IiBmaWxsPSIjY2NjIi8+Cjx0ZXh0IHg9IjI1IiB5PSIzNy41IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiMwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk5vIEltYWdlPC90ZXh0Pgo8L3N2Zz4=";
     row.innerHTML = `
-      <td><img src="${imgSrc}" alt="${movie.title}" style="width:50px;height:75px;object-fit:cover;" onerror="this.src='https://via.placeholder.com/50x75?text=Broken'"></td>
+      <td><img src="${imgSrc}" alt="${movie.title}" style="width:50px;height:75px;object-fit:cover;" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNzUiIHZpZXdCb3g9IjAgMCA1MCA3NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9Ijc1IiBmaWxsPSIjY2NjIi8+Cjx0ZXh0IHg9IjI1IiB5PSIzNy41IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiMwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkJyb2tlbjwvdGV4dD4KPHN2Zz4='"></td>
       <td>${movie.title}</td>
       <td>${movie.genre}</td>
       <td>${movie.year}</td>
