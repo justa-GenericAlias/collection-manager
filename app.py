@@ -194,5 +194,9 @@ def css(filename):
 def js(filename):
     return send_from_directory('js', filename)
 
+@app.route('/test')
+def test():
+    return {'message': 'API is working'}
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
