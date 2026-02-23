@@ -33,7 +33,9 @@ function renderRows(movies) {
   listEl.innerHTML = "";
   movies.forEach(movie => {
     const row = document.createElement("tr");
+    const imgSrc = movie.image_url || "https://via.placeholder.com/50x75?text=No+Image";
     row.innerHTML = `
+      <td><img src="${imgSrc}" alt="${movie.title}" style="width:50px;height:75px;object-fit:cover;" onerror="this.src='https://via.placeholder.com/50x75?text=Broken'"></td>
       <td>${movie.title}</td>
       <td>${movie.genre}</td>
       <td>${movie.year}</td>
@@ -72,13 +74,14 @@ form.addEventListener("submit", async e => {
   const genre = document.getElementById("genre").value.trim();
   const year = Number(document.getElementById("year").value);
   const rating = Number(document.getElementById("rating").value);
+  const image_url = document.getElementById("image_url").value.trim();
 
   if (!title || !genre || year < 1900 || rating < 1 || rating > 10) {
     alert("Please enter valid data.");
     return;
   }
 
-  const body = { title, genre, year, rating };
+  const body = { title, genre, year, rating, image_url };
   try {
     if (editingId === null) {
       await fetch(`${API_BASE}/movies`, {
@@ -123,6 +126,7 @@ listEl.addEventListener("click", async (e) => {
       document.getElementById("genre").value = movie.genre;
       document.getElementById("year").value = movie.year;
       document.getElementById("rating").value = movie.rating;
+      document.getElementById("image_url").value = movie.image_url || "";
       editingId = movie.id;
       formTitle.textContent = "Edit Movie";
       cancelEditBtn.hidden = false;
