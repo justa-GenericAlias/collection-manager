@@ -184,15 +184,15 @@ def stats():
 
 @app.route('/')
 def index():
-    return send_from_directory('..', 'index.html')
+    return send_from_directory('.', 'index.html')
 
 @app.route('/css/<path:filename>')
 def css(filename):
-    return send_from_directory('../css', filename)
+    return send_from_directory('css', filename)
 
 @app.route('/js/<path:filename>')
 def js(filename):
-    return send_from_directory('../js', filename)
+    return send_from_directory('js', filename)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
