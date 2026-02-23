@@ -34,10 +34,8 @@ function renderRows(movies) {
   movies.forEach(movie => {
     const row = document.createElement("tr");
     const imgSrc = movie.image_url || "data:image/svg+xml,<svg width='50' height='75' xmlns='http://www.w3.org/2000/svg'><rect width='50' height='75' fill='%23ccc'/><text x='25' y='40' font-family='Arial' font-size='12' fill='%23000' text-anchor='middle'>No Image</text></svg>";
-    const isPlaceholder = !movie.image_url;
-    const altText = isPlaceholder ? "" : movie.title;
     row.innerHTML = `
-      <td><img src="${imgSrc}" alt="${altText}" style="width:50px;height:75px;object-fit:cover;" onerror="this.src='data:image/svg+xml,<svg width='50' height='75' xmlns='http://www.w3.org/2000/svg'><rect width='50' height='75' fill='%23ccc'/><text x='25' y='40' font-family='Arial' font-size='12' fill='%23000' text-anchor='middle'>Broken</text></svg>'"></td>
+      <td><img src="${imgSrc}" alt="" style="width:50px;height:75px;object-fit:cover;" onerror="this.src='data:image/svg+xml,<svg width='50' height='75' xmlns='http://www.w3.org/2000/svg'><rect width='50' height='75' fill='%23ccc'/><text x='25' y='40' font-family='Arial' font-size='12' fill='%23000' text-anchor='middle'>Broken</text></svg>'"></td>
       <td>${movie.title}</td>
       <td>${movie.genre}</td>
       <td>${movie.year}</td>
