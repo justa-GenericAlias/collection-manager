@@ -184,7 +184,7 @@ def stats():
 
 @app.route('/')
 def index():
-    return send_from_directory('.', 'index.html')
+    return "Hello from Movie Collection Manager"
 
 @app.route('/css/<path:filename>')
 def css(filename):
