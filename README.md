@@ -1,31 +1,38 @@
 # Collection Manager
 
-Newest edits:
-- `server/app.py` — Flask API (CRUD, paging, stats) persisted to `server/data.json`
-- `server/data.json` — starts with 30 records
-- `server/requirements.txt` — Python deps
-- Frontend updated to call the backend API (`js/app.js`) and includes paging controls in `index.html`
+## Deployment
 
-Local run (development):
+### Domain Name + Registrar
+- **Domain Name**: movie-collection-manager-42dbff9f12cd.herokuapp.com (Heroku-provided subdomain)
+- **Registrar**: Heroku (automatic for apps; for custom domain, use Namecheap or GoDaddy)
 
-1. Ensure Python 3.8+ is installed.
+### Hosting Provider
+- **Provider**: Heroku
+- **Plan**: Free tier (Eco dyno, ~$0/month for basic usage)
 
-2. Create a virtual environment and install deps:
-```bash
-python -m venv .venv
-.venv\Scripts\activate   # Windows
-pip install -r server/requirements.txt
-```
+### Tech Stack
+- **Backend**: Flask (Python 3.12), SQLAlchemy ORM
+- **Database**: PostgreSQL
+- **Frontend**: HTML, CSS, JavaScript (Vanilla)
+- **Deployment Tool**: Gunicorn (WSGI server)
+- **Other**: flask-cors for API access
 
-3. Start the Flask server:
-```bash
-python server/app.py
-```
+### Database Type + Where Hosted
+- **Type**: PostgreSQL
+- **Hosted**: Heroku Postgres (managed database service)
 
-4. Open the applications with the link:
-```bash
-https://jaga-collection-manager.netlify.app/
-```
+### How to Deploy and Update the App
+1. **Prerequisites**: Git, Heroku CLI installed and logged in (`heroku login`).
+2. **Initial Deploy**:
+   - Commit changes: `git add . && git commit -m "Deploy"`
+   - Push to Heroku: `git push heroku main`
+   - Heroku builds the app, installs dependencies, and starts the server.
+3. **Updates**:
+   - Make changes, commit, and push: `git push heroku main`
+   - Heroku auto-deploys and restarts the app.
+4. **Monitor**: Use `heroku logs --tail` for issues; `heroku open` to view.
 
-Local development notes:
-- `server/data.json` is the source of truth for records locally. Keep backups before editing.
+### How Configuration/Secrets Are Managed (Env Vars)
+- **Database Connection**: `DATABASE_URL` (auto-set by Heroku Postgres addon; contains PostgreSQL connection string).
+- **Management**: Secrets are stored as environment variables in Heroku (Dashboard > App > Settings > Config Vars). No secrets in code or Git.
+- **Local Development**: Use `.env` file (not committed) with `DATABASE_URL=postgresql://...` for local testing.
