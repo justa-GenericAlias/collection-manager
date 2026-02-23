@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, send_from_directory
 from flask_cors import CORS
 from sqlalchemy import create_engine, Column, Integer, String, Float, inspect
 from sqlalchemy.orm import sessionmaker, declarative_base
@@ -181,6 +181,18 @@ def stats():
     avg_rating = sum([r[0] for r in avg]) / total if total else 0
     session.close()
     return jsonify({"total": total, "average_rating": round(avg_rating, 2)})
+
+@app.route('/')
+def index():
+    return send_from_directory('..', 'index.html')
+
+@app.route('/css/<path:filename>')
+def css(filename):
+    return send_from_directory('../css', filename)
+
+@app.route('/js/<path:filename>')
+def js(filename):
+    return send_from_directory('../js', filename)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
