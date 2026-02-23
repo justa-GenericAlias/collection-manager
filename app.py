@@ -7,7 +7,7 @@ import os
 Base = declarative_base()
 
 class Movie(Base):
-    __tablename__ = 'movie_collection'
+    __tablename__ = 'movies'
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
     genre = Column(String, nullable=False)
@@ -66,14 +66,10 @@ def seed_data():
             {"title": "Back to the Future", "genre": "Sci-Fi", "year": 1985, "rating": 8.5, "image_url": "https://via.placeholder.com/100x150?text=Back+to+Future"},
             {"title": "The Prestige", "genre": "Mystery", "year": 2006, "rating": 8.5, "image_url": "https://via.placeholder.com/100x150?text=Prestige"},
         ]
-        try:
-            for m in movies:
-                movie = Movie(**m)
-                session.add(movie)
-            session.commit()
-        except Exception as e:
-            print(f"Seeding failed: {e}")
-            session.rollback()
+        for m in movies:
+            movie = Movie(**m)
+            session.add(movie)
+        session.commit()
     session.close()
 
 seed_data()
@@ -197,13 +193,6 @@ def css(filename):
 @app.route('/js/<path:filename>')
 def js(filename):
     return send_from_directory('js', filename)
-
-@app.route('/test')
-def test():
-    session = Session()
-    count = session.query(Movie).count()
-    session.close()
-    return {'message': 'API is working v2', 'movie_count': count}
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
