@@ -96,19 +96,49 @@ def validate_movie(payload):
 def list_movies():
     session = Session()
     page = int(request.args.get("page", 1))
+    search = request.args.get("search", "")
+    sort = request.args.get("sort", "title")
+    order = request.args.get("order", "asc")
+    page_size = int(request.args.get("page_size", 10))
+    
     query = session.query(Movie)
+    
+    # Apply search filter
+    if search:
+        query = query.filter(Movie.title.ilike(f"%{search}%") | Movie.genre.ilike(f"%{search}%"))
+    
+    # Apply sorting
+    if sort == "title":
+        if order == "desc":
+            query = query.order_by(Movie.title.desc())
+        else:
+            query = query.order_by(Movie.title)
+    elif sort == "year":
+        if order == "desc":
+            query = query.order_by(Movie.year.desc())
+        else:
+            query = query.order_by(Movie.year)
+    elif sort == "rating":
+        if order == "desc":
+            query = query.order_by(Movie.rating.desc())
+        else:
+            query = query.order_by(Movie.rating)
+    else:
+        query = query.order_by(Movie.title)  # default
+    
     total = query.count()
-    total_pages = (total + PER_PAGE - 1) // PER_PAGE
+    total_pages = (total + page_size - 1) // page_size if total > 0 else 1
     if page < 1: page = 1
-    if page > total_pages and total_pages > 0: page = total_pages
-    start = (page - 1) * PER_PAGE
-    movies = query.offset(start).limit(PER_PAGE).all()
+    if page > total_pages: page = total_pages
+    
+    start = (page - 1) * page_size
+    movies = query.offset(start).limit(page_size).all()
     data = [{"id": m.id, "title": m.title, "genre": m.genre, "year": m.year, "rating": m.rating, "image_url": m.image_url} for m in movies]
     session.close()
     return jsonify({
         "total": total,
         "page": page,
-        "per_page": PER_PAGE,
+        "per_page": page_size,
         "total_pages": total_pages,
         "data": data
     })

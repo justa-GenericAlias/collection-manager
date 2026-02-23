@@ -59,6 +59,29 @@
 
     <section id="list-section">
       <h2>Movie List</h2>
+      <div class="filters" style="margin-bottom:12px;">
+        <label>Search: <input type="text" id="search" placeholder="Title or genre"></label>
+        <label>Sort by:
+          <select id="sort">
+            <option value="title">Title</option>
+            <option value="year">Year</option>
+            <option value="rating">Rating</option>
+          </select>
+          <select id="order">
+            <option value="asc">Asc</option>
+            <option value="desc">Desc</option>
+          </select>
+        </label>
+        <label>Page size:
+          <select id="page-size">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+          </select>
+        </label>
+        <button id="apply-filters" class="btn">Apply</button>
+      </div>
       <div id="paging" class="card" style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
         <button id="prev-page" class="btn">Previous</button>
         <div style="flex:1;text-align:center">Page <span id="current-page">1</span> of <span id="total-pages">1</span></div>

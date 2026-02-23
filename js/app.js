@@ -1,10 +1,20 @@
 // Frontend now talks to a backend API (Flask) which persists JSON on the server.
 const API_BASE = "https://movie-collection-manager-42dbff9f12cd.herokuapp.com";
-const PER_PAGE = 10;
-
 let currentPage = 1;
 let totalPages = 1;
 let editingId = null;
+let search = "";
+let sort = "title";
+let order = "asc";
+let pageSize = 10;
+
+// Read page size from cookie
+const cookies = document.cookie.split(';');
+const pageSizeCookie = cookies.find(c => c.trim().startsWith('pageSize='));
+if (pageSizeCookie) {
+  pageSize = parseInt(pageSizeCookie.split('=')[1]);
+}
+document.getElementById('page-size').value = pageSize;
 
 const listEl = document.getElementById("movie-list");
 const form = document.getElementById("movie-form");
@@ -18,7 +28,14 @@ const prevBtn = document.getElementById("prev-page");
 const nextBtn = document.getElementById("next-page");
 
 async function fetchMovies(page = 1) {
-  const res = await fetch(`${API_BASE}/movies?page=${page}`);
+  const params = new URLSearchParams({
+    page: page,
+    search: search,
+    sort: sort,
+    order: order,
+    page_size: pageSize
+  });
+  const res = await fetch(`${API_BASE}/movies?${params}`);
   if (!res.ok) throw new Error("Failed to load movies");
   return res.json();
 }
@@ -152,6 +169,19 @@ prevBtn.addEventListener('click', () => {
 });
 nextBtn.addEventListener('click', () => {
   if (currentPage < totalPages) loadPage(currentPage + 1);
+});
+
+// Apply filters
+document.getElementById('apply-filters').addEventListener('click', () => {
+  search = document.getElementById('search').value.trim();
+  sort = document.getElementById('sort').value;
+  order = document.getElementById('order').value;
+  const newPageSize = parseInt(document.getElementById('page-size').value);
+  if (newPageSize !== pageSize) {
+    pageSize = newPageSize;
+    document.cookie = `pageSize=${pageSize}; path=/; max-age=31536000`;
+  }
+  loadPage(1); // Reset to page 1
 });
 
 // initial load
