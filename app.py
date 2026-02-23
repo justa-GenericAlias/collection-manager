@@ -196,7 +196,10 @@ def js(filename):
 
 @app.route('/test')
 def test():
-    return {'message': 'API is working'}
+    session = Session()
+    count = session.query(Movie).count()
+    session.close()
+    return {'message': 'API is working', 'movie_count': count}
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
